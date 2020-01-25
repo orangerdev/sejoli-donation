@@ -115,6 +115,7 @@ class Sejoli_Donation {
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/product.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
@@ -157,6 +158,9 @@ class Sejoli_Donation {
 		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_scripts' );
 
+		$product = new SejoliDonation\Admin\Product( $this->get_plugin_name(), $this->get_version() );
+
+		$this->loader->add_filter( 'sejoli/product/fields',	$product, 'set_product_fields', 12);
 	}
 
 	/**
