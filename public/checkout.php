@@ -58,4 +58,24 @@ class Checkout {
 
 	}
 
+    /**
+     * Set checkout template page
+     * Hooked via filter single_template
+     * @since   1.0.0
+     * @param   string  $template  Current template file
+     * @return  string  Modified template file
+     */
+    public function set_checkout_template(string $template) {
+
+        global $post;
+
+        $product = sejolisa_get_product($post->ID);
+
+		if(false !== $product->donation) :
+			$template = SEJOLI_DONATION_DIR . 'public/partials/checkout.php';
+		endif;
+
+        return $template;
+    }
+
 }

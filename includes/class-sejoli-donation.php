@@ -180,6 +180,7 @@ class Sejoli_Donation {
 		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_scripts' );
 
 		$checkout = new SejoliDonation\Front\Checkout( $this->get_plugin_name(), $this->get_version() );
+		$this->loader->add_filter( 'single_template',	$checkout, 'set_checkout_template', 120);
 
 	}
 
