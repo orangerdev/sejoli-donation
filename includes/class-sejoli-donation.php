@@ -160,7 +160,8 @@ class Sejoli_Donation {
 
 		$product = new SejoliDonation\Admin\Product( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_filter( 'sejoli/product/fields',	$product, 'set_product_fields', 12);
+		$this->loader->add_filter( 'sejoli/product/fields',		$product, 'set_product_fields', 	12);
+		$this->loader->add_filter( 'sejoli/product/meta-data',	$product, 'set_product_metadatas', 	100, 2);
 	}
 
 	/**

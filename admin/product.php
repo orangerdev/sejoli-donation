@@ -162,19 +162,22 @@ class Product {
 	 * @param  int     $product_id
 	 * @return WP_Post
 	 */
-    public function set_product_metadata(\WP_Post $product, int $product_id) {
+    public function set_product_metadatas(\WP_Post $product, int $product_id) {
 
-        $courses = carbon_get_post_meta($product_id, 'learnpress_course');
+        $active = boolval( carbon_get_post_meta($product_id, 'donation_active') );
 
-        if(is_array($courses) && 0 < count($courses)) :
-
-            $product->learnpress = array();
-
-            foreach($courses as $course) :
-                $product->learnpress[] = $course['id'];
-            endforeach;
-
-        endif;
+		if(false !== $active) :
+			$product->donation 	= array(
+				'min'             => floatval( carbon_get_post_meta($product_id, 'donation_min') ),
+				'max'             => floatval( carbon_get_post_meta($product_id, 'donation_max') ),
+				'show_progress'   => boolval( carbon_get_post_meta($product_id, 'donation_show_progress') ),
+				'goal'            => floatval( carbon_get_post_meta($product_id, 'donation_goal') ),
+				'goal_limit'      => carbon_get_post_meta($product_id, 'donation_goal_limit'),
+				'goal_limit_date' => carbon_get_post_meta($product_id, 'donation_goal_limit_date')
+			);
+		else :
+			$product->donation = false;
+		endif;
 
         return $product;
     }
