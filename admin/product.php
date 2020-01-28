@@ -111,23 +111,42 @@ class Product {
 					->set_attribute('type', 'number')
 					->set_default_value(10000)
 					->set_required(true)
-					->set_help_text( __('Diisi dengan nilai minimum donasi', 'sejoli'))
+					->set_help_text( __('Diisi dengan nilai minimum donasi. Dalam rupiah', 'sejoli'))
 					->set_conditional_logic($conditional['donation-active']),
 
 				Field::make('text',		'donation_max',		__('Nilai maximum donasi', 'sejoli-donation'))
 					->set_attribute('type', 'number')
 					->set_default_value(1000000)
 					->set_required(true)
-					->set_help_text( __('Diisi dengan nilai maximum donasi', 'sejoli'))
+					->set_help_text( __('Diisi dengan nilai maximum donasi. Dalam rupiah', 'sejoli'))
 					->set_conditional_logic($conditional['donation-active']),
 
 				Field::make('checkbox', 'donation_show_progress', __('Tampilkan progress donasi', 'sejoli-donation'))
 					->set_conditional_logic($conditional['donation-active']),
 
-				Field::make('text',		'donation_goal',		__('Target donasi', 'sejoli-donation'))
+				Field::make('text',		'donation_goal',		__('Nilai target donasi', 'sejoli-donation'))
 					->set_attribute('type', 'number')
-					->set_help_text( __('Kosongkan jika tidak ingin ada target donasi', 'sejoli-donation'))
-					->set_conditional_logic($conditional['donation-progress'])
+					->set_help_text( __('Kosongkan jika tidak ingin ada target donasi. Dalam rupiah', 'sejoli-donation'))
+					->set_conditional_logic($conditional['donation-progress']),
+
+				Field::make('select', 	'donation_goal_limit',	__('Batasan target waktu donasi', 'sejoli-donation'))
+					->add_options(array(
+						''        => __('Tidak ada batasan waktu', 'donasi'),
+						'weekly'  => __('Per minggu', 'donasi'),
+						'monthly' => __('Per bulan', 'donasi'),
+						'yearly'  => __('Per tahun', 'donasi'),
+						'custom'  => __('Waktu ditentukan', 'donasi')
+					))
+					->set_conditional_logic($conditional['donation-progress']),
+
+				Field::make('date',		'donation_goal_limit_date', __('Batas waktu donasi', 'sejoli-donation'))
+					->set_required(true)
+					->set_conditional_logic(array(
+						array(
+							'field'	=> 'donation_goal_limit',
+							'value'	=> 'custom'
+						)
+					))
 
             )
         );
