@@ -121,6 +121,7 @@ class Sejoli_Donation {
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/checkout.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/public.php';
 
 		$this->loader = new Sejoli_Donation_Loader();
@@ -177,6 +178,8 @@ class Sejoli_Donation {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_scripts' );
+
+		$checkout = new SejoliDonation\Front\Checkout( $this->get_plugin_name(), $this->get_version() );
 
 	}
 
