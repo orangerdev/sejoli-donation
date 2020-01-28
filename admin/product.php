@@ -89,7 +89,23 @@ class Product {
         $fields[]   = array(
             'title'     => __('Donasi', 'sejoli-donation'),
             'fields'    => array(
-                Field::make('checkbox', 'donation_active', 	__('Aktifkan sistem donasi', 'sejoli-donation')),
+				Field::make( 'separator', 'sep_donation' , __('Pengaturan Donasi', 'sejoli'))
+					->set_classes('sejoli-with-help'),
+					// ->set_help_text('<a href="' . sejolisa_get_admin_help('shipping') . '" class="thickbox sejoli-help">Tutorial <span class="dashicons dashicons-video-alt2"></span></a>'),
+
+                Field::make('html',     'html_info_donation')
+                    ->set_html('<div class="sejoli-html-message info"><p>'. __('Pengaturan ini hanya <strong>BERLAKU</strong> jika tipe produk adalah Produk Digital', 'sejoli') . '</p></div>'),
+
+                Field::make('checkbox', 'donation_active', 	__('Aktifkan sistem donasi', 'sejoli-donation'))
+					->set_conditional_logic(array(
+						[
+							'field'	=> 'payment_type',
+							'value'	=> 'one-time'
+						],[
+							'field' => 'product_type',
+							'value' => 'digital'
+						]
+					)),
 
 				Field::make('text',		'donation_min',		__('Nilai minimum donasi', 'sejoli-donation'))
 					->set_attribute('type', 'number')
