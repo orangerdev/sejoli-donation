@@ -81,4 +81,19 @@ function run_sejoli_donation() {
 	$plugin->run();
 
 }
+
+/**
+ * Plugin update checker
+ */
+
+require_once(SEJOLISA_DIR . 'third-parties/yahnis-elsts/plugin-update-checker/plugin-update-checker.php');
+
+$update_checker = Puc_v4_Factory::buildUpdateChecker(
+	'https://github.com/orangerdev/sejoli-donation',
+	__FILE__,
+	'sejoli-donation'
+);
+
+$update_checker->setBranch('master');
+
 run_sejoli_donation();
