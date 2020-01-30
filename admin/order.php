@@ -56,4 +56,20 @@ class Order {
 
 	}
 
+    /**
+     * Delete transient donation progress data
+     * Hooked via action sejoli/order/set-status/completed, priority 100
+     * Hooked via action sejoli/order/set-status/refunded, priority 100
+     * Hooked via action sejoli/order/set-status/cancelled, priority 100
+     * @since   1.0.0
+     * @param   array  $order_data
+     * @return  void
+     */
+    public function refresh_donation_cache(array $order_data) {
+        $product_id = intval( $order_data['product_id'] );
+        $key        = 'total_donation_product-' . $product_id;
+
+        delete_transient( $product_id );
+    }
+
 }
