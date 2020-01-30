@@ -94,7 +94,10 @@ class Product {
 					// ->set_help_text('<a href="' . sejolisa_get_admin_help('shipping') . '" class="thickbox sejoli-help">Tutorial <span class="dashicons dashicons-video-alt2"></span></a>'),
 
                 Field::make('html',     'html_info_donation')
-                    ->set_html('<div class="sejoli-html-message info"><p>'. __('Pengaturan ini hanya <strong>BERLAKU</strong> jika tipe produk adalah Produk Digital', 'sejoli') . '</p></div>'),
+                    ->set_html('<div class="sejoli-html-message info">'.
+						'<p>'. __('Pengaturan ini hanya <strong>BERLAKU</strong> jika tipe produk adalah Produk Digital', 'sejoli') . '</p>'.
+						'<p>'. __('Pastikan harga produk di tab UMUM, field <strong>Harga Satuan</strong> diisi dengan nilai 0', 'sejoli') . 
+					'</div>'),
 
                 Field::make('checkbox', 'donation_active', 	__('Aktifkan sistem donasi', 'sejoli-donation'))
 					->set_conditional_logic(array(
