@@ -3,11 +3,11 @@ sejoli_get_template_part( 'checkout/header.php' );
 sejoli_get_template_part( 'checkout/header-logo.php' );
 
 $product                  = sejolisa_get_product($post->ID);
-$progress                 = sejoli_get_donation_progress($post->ID);
+$progress                 = sejolisa_get_donation_progress($post->ID);
 $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_product_description'));
-
 ?>
 <div class="ui text container donation-checkout">
+
     <?php if(false !== $use_checkout_description) : ?>
     <div class='deskripsi-produk'>
         <?php echo apply_filters('the_content', carbon_get_post_meta($post->ID, 'checkout_product_description')); ?>
@@ -27,10 +27,27 @@ $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_pro
                 );
             endif; ?>
         </h4>
-        <div class="ui teal small indicating progress" id='donation-progress-bar' data-percent=<?php echo $progress['percent']; ?>>
-            <div class="bar"><div class="progress"></div></div>
+        <div class="ui teal small indicating progress" id='donation-progress-bar' data-percent='<?php echo $progress['percent']; ?>'>
+            <div class="bar"></div>
             <div class='label'>
-                <?php printf(__('Total donasi : %s', 'sejoli'), $progress['total']);?>
+                <?php printf(__('Total : %s', 'sejoli'), $progress['total']);?>
+                <?php
+                if(in_array($progress['type'], array('weekly', 'monthly', 'yearlye'))) :
+                    switch($progress['type']) :
+                        case 'weekly' :
+                            _e('per minggu ini', 'sejoli-donation');
+                            break;
+
+                        case 'monthly' :
+                            printf(__('per bulan %s', 'sejoli-donation'), date('F'));
+                            break;
+
+                        case 'yearly' :
+                            printf(__('per tahun %s', 'sejoli-donation'), date('Y'));
+                            break;
+                    endswitch;
+                endif;
+                ?>
             </div>
         </div>
     </div>
