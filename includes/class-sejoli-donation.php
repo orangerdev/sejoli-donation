@@ -115,6 +115,7 @@ class Sejoli_Donation {
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/order.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/product.php';
 
 		/**
