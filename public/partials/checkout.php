@@ -260,7 +260,8 @@ __debug($product);
     </div>
 </script>
 <script type='text/JavaScript'>
-var checkout;
+var checkout,
+    delay = 0;
 jQuery(document).ready(function($){
     checkout = new sejoliSaCheckout();
     checkout.init();
@@ -270,6 +271,14 @@ jQuery(document).ready(function($){
         checkout.getCalculate();
     });
 });
+
+$(document).on('keyup', '#price', function(){
+    clearTimeout(delay);
+    delay = setTimeout(function(){
+        console.log('test');
+        checkout.getCalculate();
+    },500)
+})
 
 </script>
 <?php

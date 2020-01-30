@@ -181,12 +181,13 @@ class Sejoli_Donation {
 
 		$checkout = new SejoliDonation\Front\Checkout( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts',		$checkout, 'register_css_files',		100);
-		$this->loader->add_action( 'wp_enqueue_scripts',		$checkout, 'register_js_files',			100);
-		$this->loader->add_action( 'parse_request',				$checkout, 'check_requested_variables',	1);
-		$this->loader->add_filter( 'single_template',			$checkout, 'set_checkout_template', 	120);
-		$this->loader->add_filter( 'sejoli/product/price',		$checkout, 'set_product_price',			15, 2);
-		$this->loader->add_filter( 'sejoli/order/grand-total',	$checkout, 'set_grand_total',			101, 2);
+		$this->loader->add_action( 'wp_enqueue_scripts',				$checkout, 'register_css_files',		100);
+		$this->loader->add_action( 'wp_enqueue_scripts',				$checkout, 'register_js_files',			100);
+		$this->loader->add_action( 'parse_request',						$checkout, 'check_requested_variables',	1);
+		$this->loader->add_filter( 'single_template',					$checkout, 'set_checkout_template', 	120);
+		$this->loader->add_filter( 'sejoli/checkout/is-product-valid',	$checkout, 'validate_donation',			10, 2);
+		$this->loader->add_filter( 'sejoli/product/price',				$checkout, 'set_product_price',			15, 2);
+		$this->loader->add_filter( 'sejoli/order/grand-total',			$checkout, 'set_grand_total',			101, 2);
 
 	}
 

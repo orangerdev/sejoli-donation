@@ -41,6 +41,14 @@ class Checkout {
 	 */
 	protected $request_vars = array();
 
+
+	/**
+	 * Set if donation is invalid, lower than min, or higher than maximu
+	 * @since	1.0.0
+	 * @var 	boolean|string
+	 */
+	protected $donation_invalid = false;
+
     /**
 	 * The ID of this plugin.
 	 *
@@ -154,16 +162,63 @@ class Checkout {
 		$active     = boolval( carbon_get_post_meta($product_id, 'donation_active') );
 
 		if(false !== $active) :
+
 			$min_price = carbon_get_post_meta($product_id, 'donation_min');
 			$max_price = carbon_get_post_meta($product_id, 'donation_max');
 
 			$price     = (0 === $this->request_vars['price']) ? $min_price : $this->request_vars['price'];
 
-			$price     = ($min_price > $price) ? $min_price : $price;
-			$price     = ($max_price < $price) ? $max_price : $price;
+			if($min_price > $price) :
+
+				$price                  = $min_price;
+				$this->donation_invalid = 'min';
+
+			elseif($max_price < $price) :
+
+				$price                  = $max_price;
+				$this->donation_invalid = 'max';
+
+			endif;
+
 		endif;
 
 		return floatval($price);
+	}
+
+	/**
+	 * Validate the donation
+	 * Hooked via filter sejoli/checkout/is-product-valid, priority 10
+	 * @since 	1.0.0
+	 * @param  	boolean  	$valid
+	 * @param  	WP_Post 	$product
+	 * @return 	boolean
+	 */
+	public function validate_donation($valid, \WP_Post $product) {
+
+		if(false !== $this->donation_invalid) :
+
+			$min_price = carbon_get_post_meta($product->ID, 'donation_min');
+			$max_price = carbon_get_post_meta($product->ID, 'donation_max');
+
+			if('min' === $this->donation_invalid) :
+				sejolisa_set_message(
+					sprintf(
+						__('Donasi tidak boleh lebih kecil daripada %s', 'sejoli'),
+						sejolisa_price_format($min_price)
+					)
+				);
+			elseif('max' === $this->donation_invalid) :
+				sejolisa_set_message(
+					sprintf(
+						__('Donasi tidak boleh lebih besar daripada %s', 'sejoli'),
+						sejolisa_price_format($max_price)
+					)
+				);
+			endif;
+
+		endif;
+
+		return $valid;
 	}
 
 	/**
