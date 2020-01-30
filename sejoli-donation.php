@@ -39,6 +39,8 @@ define( 'SEJOLI_DONATION_VERSION', '1.0.0' );
 define( 'SEJOLI_DONATION_DIR',	 	plugin_dir_path(__FILE__));
 define( 'SEJOLI_DONATION_URL',	 	plugin_dir_url(__FILE__));
 
+require SEJOLI_DONATION_DIR . '/third-parties/autoload.php';
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-sejoli-donation-activator.php
@@ -86,7 +88,7 @@ function run_sejoli_donation() {
  * Plugin update checker
  */
 
-require_once(SEJOLISA_DIR . 'third-parties/yahnis-elsts/plugin-update-checker/plugin-update-checker.php');
+require_once(SEJOLI_DONATION_DIR . 'third-parties/yahnis-elsts/plugin-update-checker/plugin-update-checker.php');
 
 $update_checker = Puc_v4_Factory::buildUpdateChecker(
 	'https://github.com/orangerdev/sejoli-donation',
