@@ -2,18 +2,39 @@
 sejoli_get_template_part( 'checkout/header.php' );
 sejoli_get_template_part( 'checkout/header-logo.php' );
 
-$product = sejolisa_get_product($post->ID);
+$product                  = sejolisa_get_product($post->ID);
 $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_product_description'));
 
-__debug($product);
 ?>
-
-<div class="ui text container">
+<div class="ui text container donation-checkout">
     <?php if(false !== $use_checkout_description) : ?>
     <div class='deskripsi-produk'>
         <?php echo apply_filters('the_content', carbon_get_post_meta($post->ID, 'checkout_product_description')); ?>
     </div>
     <?php endif; ?>
+
+    <?php if(false !== $product->donation['show_progress']) : ?>
+    <div class="donation-progress">
+        <h3><?php _e('Perkembangan Donasi', 'sejoli'); ?></h3>
+        <h4>
+            <?php printf(__('Target donasi : %s', 'sejoli'), sejolisa_price_format($product->donation['goal'])); ?>
+            <?php
+            if('custom' === $product->donation['goal_limit']):
+                printf(
+                    __('hingga %s', 'sejoli'),
+                    date('d M Y', strtotime($product->donation['goal_limit_date']. ' 00:00:00'))
+                );
+            endif; ?>
+        </h4>
+        <div class="ui indicating progress">
+            <div class="bar"></div>
+            <div class='label'>
+                <?php printf(__('Total donasi : %s', 'sejoli'), 'Rp 100.000');?>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
     <div class="produk-dibeli">
         <table class="ui unstackable table">
             <thead>
@@ -134,8 +155,8 @@ __debug($product);
                     <div class="twelve wide column">
                         <h4>{{:product.title}}</h4>
                         <p>
-                            <?php printf(__('Minimum donasi %s', 'sejoli-donation'), sejolisa_price_format($product->donation['min'])); ?><br />
-                            <?php printf(__('Maximum donasi %s', 'sejoli-donation'), sejolisa_price_format($product->donation['max'])); ?>
+                            <?php printf(__('Min: %s', 'sejoli-donation'), sejolisa_price_format($product->donation['min'])); ?><br />
+                            <?php printf(__('Max: %s', 'sejoli-donation'), sejolisa_price_format($product->donation['max'])); ?>
                         </p>
                         <input type="hidden" id="product_id" name="product_id" value="{{:product.id}}">
                     </div>
