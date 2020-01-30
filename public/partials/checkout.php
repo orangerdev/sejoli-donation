@@ -3,6 +3,7 @@ sejoli_get_template_part( 'checkout/header.php' );
 sejoli_get_template_part( 'checkout/header-logo.php' );
 
 $product                  = sejolisa_get_product($post->ID);
+$progress                 = sejoli_get_donation_progress($post->ID);
 $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_product_description'));
 
 ?>
@@ -26,10 +27,10 @@ $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_pro
                 );
             endif; ?>
         </h4>
-        <div class="ui indicating progress">
-            <div class="bar"></div>
+        <div class="ui teal small indicating progress" id='donation-progress-bar' data-percent=<?php echo $progress['percent']; ?>>
+            <div class="bar"><div class="progress"></div></div>
             <div class='label'>
-                <?php printf(__('Total donasi : %s', 'sejoli'), 'Rp 100.000');?>
+                <?php printf(__('Total donasi : %s', 'sejoli'), $progress['total']);?>
             </div>
         </div>
     </div>
@@ -280,23 +281,26 @@ $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_pro
         </div>
     </div>
 </script>
-<script type='text/JavaScript'>
+<script type='text/javascript'>
 var checkout,
     delay = 0;
+
 jQuery(document).ready(function($){
+    $('#donation-progress-bar').progress();
+
     checkout = new sejoliSaCheckout();
     checkout.init();
 
     $(document).on('ready', '#price', function(){
-        console.log($('#price').val());
         checkout.getCalculate();
     });
+
+
 });
 
 $(document).on('keyup', '#price', function(){
     clearTimeout(delay);
     delay = setTimeout(function(){
-        console.log('test');
         checkout.getCalculate();
     },500)
 })

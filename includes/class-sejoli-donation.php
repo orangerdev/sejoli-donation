@@ -124,6 +124,12 @@ class Sejoli_Donation {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/checkout.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/public.php';
 
+
+		/**
+		 * Functions
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'functions/order.php';
+
 		$this->loader = new Sejoli_Donation_Loader();
 
 	}
