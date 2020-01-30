@@ -112,7 +112,8 @@ class Checkout {
 			return;
 		endif;
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/sejoli-donation-public.css', array(), $this->version, 'all' );
+		wp_register_style	( 'semantic-ui-progress',	'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/progress.min.css', array('semantic-ui'), '2.4.1', 'all');
+		wp_enqueue_style	( $this->plugin_name, 		plugin_dir_url( __FILE__ ) . 'css/sejoli-donation-public.css', array('semantic-ui-progress'), $this->version, 'all' );
 	}
 
 	/**
@@ -123,8 +124,9 @@ class Checkout {
 	 */
 	public function register_js_files() {
 
-		wp_register_script	('jquery-mask',			plugin_dir_url( __FILE__ ) . 'js/jquery-mask-plugin.js', array('jquery'), '1.14.16', true);
-		wp_enqueue_script	( $this->plugin_name, 	plugin_dir_url( __FILE__ ) . 'js/sejoli-donation-public.js', array( 'jquery', 'jquery-mask' ), $this->version, true );
+		wp_register_script	('jquery-mask',				plugin_dir_url( __FILE__ ) . 'js/jquery-mask-plugin.js', array('jquery'), '1.14.16', true);
+		wp_register_script 	('semantic-ui-progress',	'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/progress.min.js', array('jquery', 'semantic-ui'), '2.4.1', true);
+		wp_enqueue_script	( $this->plugin_name, 		plugin_dir_url( __FILE__ ) . 'js/sejoli-donation-public.js', array( 'jquery', 'jquery-mask', 'semantic-ui-progress' ), $this->version, true );
 
 	}
 
