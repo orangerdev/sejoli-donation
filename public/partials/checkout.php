@@ -181,10 +181,11 @@ $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_pro
                 </div>
             </td>
             <td>
-                <div class="ui labeled input">
-                    <div class="ui label">Rp.</div>
+                <div class="ui teal labeled input">
+                    <div class="ui teal label">Rp.</div>
                     <input type='text' id='price' name='price' value="{{:product.price}}" />
                 </div>
+                <small><i>donasi bisa diisi bebas</i></small>
             </td>
         </tr>
     {{/if}}
