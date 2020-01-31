@@ -9,14 +9,14 @@
  * that starts the plugin.
  *
  * @link              Ridwan Arifandi
- * @since             1.0.0
+ * @since             1.0.1
  * @package           Sejoli_Donation
  *
  * @wordpress-plugin
  * Plugin Name:       Sejoli - Donasi
  * Plugin URI:        https://sejoli.co.id
  * Description:       Implements donation/crowdfunctiong into SEJOLI premium membership WordPress plugin
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            Ridwan Arifandi
  * Author URI:        https://ridwan-arifandi.com
  * License:           GPL-2.0+
@@ -32,10 +32,10 @@ if ( ! defined( 'WPINC' ) ) {
 
 /**
  * Currently plugin version.
- * Start at version 1.0.0 and use SemVer - https://semver.org
+ * Start at version 1.0.1 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'SEJOLI_DONATION_VERSION', '1.0.0' );
+define( 'SEJOLI_DONATION_VERSION', '1.0.1' );
 define( 'SEJOLI_DONATION_DIR',	 	plugin_dir_path(__FILE__));
 define( 'SEJOLI_DONATION_URL',	 	plugin_dir_url(__FILE__));
 
