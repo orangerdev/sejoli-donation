@@ -143,7 +143,7 @@ class Checkout {
 
         $product = sejolisa_get_product($post->ID);
 
-		if(false !== $product->donation) :
+		if(property_exists($product, 'donation') && false !== $product->donation) :
 			$this->is_donation_page = true;
 			$template = SEJOLI_DONATION_DIR . 'public/partials/checkout.php';
 		endif;
