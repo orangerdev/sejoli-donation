@@ -49,6 +49,13 @@ class Checkout {
 	 */
 	protected $donation_invalid = false;
 
+	/**
+	 * Set donation amount
+	 * @since	1.0.0
+	 * @var 	float
+	 */
+	protected $amount = 0.0;
+
     /**
 	 * The ID of this plugin.
 	 *
@@ -163,7 +170,7 @@ class Checkout {
 		$product_id = $product->ID;
 		$active     = boolval( carbon_get_post_meta($product_id, 'donation_active') );
 
-		if(false !== $active) :
+		if(false !== $active && isset($this->request_vars['price'])) :
 
 			$min_price = carbon_get_post_meta($product_id, 'donation_min');
 			$max_price = carbon_get_post_meta($product_id, 'donation_max');
@@ -185,6 +192,21 @@ class Checkout {
 		endif;
 
 		return floatval($price);
+	}
+
+	/**
+	 * Set product price in order detail
+	 * Hooked via filter sejoli/order/order-detail, priority 120
+	 * @param 	array $order_detail
+	 * @return 	array
+	 */
+	public function set_product_price_in_order(array $order_detail) {
+
+		if(isset($order_detail['meta_data']['donation'])) :
+			$order_detail['product']->price = $order_detail['meta_data']['donation'];
+		endif;
+
+		return $order_detail;
 	}
 
 	/**
@@ -239,9 +261,28 @@ class Checkout {
 			$total = (0 === $this->request_vars['price']) ? $product->donation['min'] : $this->request_vars['price'];
 			$total = ($product->donation['min'] > $total) ? $product->donation['min'] : $total;
 			$total = ($product->donation['max'] < $total) ? $product->donation['max'] : $total;
+
+			$this->amount = $total;
 		endif;
 
 		return floatval($total);
+	}
+
+	/**
+	 * Add donation amount to order meta
+	 * Hooked via filter sejoli/order/meta-data, priority 200
+	 * @since 	1.0.0
+	 * @param 	array 	$order_meta	Array of order meta data
+	 * @param 	array 	$order     	Array of order data
+	 * @return 	array
+	 */
+	public function add_donation_amount_to_order_meta(array $order_meta, array $order) {
+
+		if(0 < $this->amount) :
+			$order_meta['donation']	= $this->amount;
+		endif;
+
+		return $order_meta;
 	}
 
 }

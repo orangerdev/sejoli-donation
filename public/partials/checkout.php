@@ -182,10 +182,10 @@ $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_pro
         </tr>
         <tr>
             <td colspan='2' style='padding-top:0;text-align:left;'>
-                <div class="ui icon fluid teal labeled input loading">
+                <div class="ui icon fluid teal labeled input">
                     <div class="ui teal label">Rp.</div>
                     <input type='text' id='price' name='price' value="{{:product.price}}" />
-                    <i class="search icon"></i>
+                    <i class="hand paper outline icon"></i>
                 </div>
                 <div class="ui info tiny icon message">
                     <i class="info circle icon"></i>
@@ -331,10 +331,12 @@ jQuery(document).ready(function($){
 });
 
 $(document).on('keyup', '#price', function(){
+    var input;
     clearTimeout(delay);
+    input = $(this).parent().addClass('loading');
     delay = setTimeout(function(){
         checkout.getCalculate();
-    },900)
+    },1000)
 })
 
 </script>
