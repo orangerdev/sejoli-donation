@@ -57,8 +57,9 @@ $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_pro
         <table class="ui unstackable table">
             <thead>
                 <tr>
-                    <th style="width:55%">&nbsp;</th>
-                    <th style="width:45%"><?php _e('Donasi', 'sejoli-donation'); ?></th>
+                    <th colspan='2' style='text-align:center;'>
+                        <?php _e('Pengisian Donasi', 'sejoli-donation'); ?>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -163,29 +164,42 @@ $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_pro
 <script id="produk-dibeli-template" type="text/x-jsrender">
     {{if product}}
         <tr>
-            <td>
+            <td colspan='2'>
                 <div class="ui stackable grid">
                     {{if product.image}}
                         <div class="four wide column">
                             <img src="{{:product.image}}">
                         </div>
+                    <div class="twelve wide column" style='text-align:left;'>
+                    {{else}}
+                    <div class="sixteen wide column" style='text-align:left;'>
                     {{/if}}
-                    <div class="twelve wide column">
                         <h4>{{:product.title}}</h4>
-                        <p>
-                            <?php printf(__('Min: %s', 'sejoli-donation'), sejolisa_price_format($product->donation['min'])); ?><br />
-                            <?php printf(__('Max: %s', 'sejoli-donation'), sejolisa_price_format($product->donation['max'])); ?>
-                        </p>
                         <input type="hidden" id="product_id" name="product_id" value="{{:product.id}}">
                     </div>
                 </div>
             </td>
-            <td>
-                <div class="ui teal labeled input">
+        </tr>
+        <tr>
+            <td colspan='2' style='padding-top:0;text-align:left;'>
+                <div class="ui icon fluid teal labeled input loading">
                     <div class="ui teal label">Rp.</div>
                     <input type='text' id='price' name='price' value="{{:product.price}}" />
+                    <i class="search icon"></i>
                 </div>
-                <small><i>donasi bisa diisi bebas</i></small>
+                <div class="ui info tiny icon message">
+                    <i class="info circle icon"></i>
+                    <div class="content">
+                        <div class="header">
+                            <h4><?php _e('Aturan pengisian donasi', 'sejoli'); ?></h4>
+                            <p>
+                                <?php _e('Besar donasi bisa ditentukan oleh anda sendiri', 'sejoli'); ?><br />
+                                <?php printf(__('Minimal donasi: %s', 'sejoli-donation'), sejolisa_price_format($product->donation['min'])); ?><br />
+                                <?php printf(__('Maximal donasi: %s', 'sejoli-donation'), sejolisa_price_format($product->donation['max'])); ?><br />
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </td>
         </tr>
     {{/if}}
@@ -320,7 +334,7 @@ $(document).on('keyup', '#price', function(){
     clearTimeout(delay);
     delay = setTimeout(function(){
         checkout.getCalculate();
-    },500)
+    },900)
 })
 
 </script>
