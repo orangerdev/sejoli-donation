@@ -69,7 +69,7 @@ class Order {
         $product_id = intval( $order_data['product_id'] );
         $key        = 'total_donation_product-' . $product_id;
 
-        delete_transient( $product_id );
+        delete_transient( $key );
     }
 
 }
