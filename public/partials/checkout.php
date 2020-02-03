@@ -332,11 +332,13 @@ jQuery(document).ready(function($){
 
 $(document).on('keyup', '#price', function(){
     var input;
+
     clearTimeout(delay);
-    input = $(this).parent().addClass('loading');
+
     delay = setTimeout(function(){
+        input = $(this).parent().addClass('loading');
         checkout.getCalculate();
-    },1000)
+    },2000)
 })
 
 </script>
