@@ -36,6 +36,7 @@ Coming soon
 = 1.0.2 =
 * Modify donation field v2
 * Fix bug in displaying product price in thank you page
+* Fix wrong transient key to cache total donation
 
 = 1.0.1 =
 * Make donation field more clear and detailed
