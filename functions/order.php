@@ -13,7 +13,7 @@ function sejolisa_get_donation_progress($product_id) {
     $key        = 'total_donation_product-' . $product_id;
     $total      = get_transient($key);
     $time_type  = carbon_get_post_meta($product_id, 'donation_goal_limit');
-    $goal       = carbon_get_post_meta($product_id, 'donation_goal');
+    $goal       = intval(carbon_get_post_meta($product_id, 'donation_goal'));
     $limit_date = carbon_get_post_meta($product_id, 'donation_goal_limit_date');
 
     if(false === $total) :
@@ -67,7 +67,7 @@ function sejolisa_get_donation_progress($product_id) {
 
     return array(
         'total'   => sejolisa_price_format($total),
-        'percent' => ceil($total / $goal * 100),
+        'percent' => (0 === $goal) ? 0 : ceil($total / $goal * 100),
         'type'    => $time_type
     );
 }
