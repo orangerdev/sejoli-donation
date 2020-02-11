@@ -330,7 +330,7 @@ jQuery(document).ready(function($){
 
 });
 
-$(document).on('keyup', '#price', function(){
+jQuery(document).on('keyup', '#price', function(){
     var input;
 
     clearTimeout(delay);
