@@ -258,7 +258,7 @@ class Checkout {
 		$product = sejolisa_get_product($post_data['product_id']);
 
 		if(false !== $product->donation) :
-			$total = (0 === $this->request_vars['price']) ? $product->donation['min'] : $this->request_vars['price'];
+			$total = (0 === $this->request_vars['price']) ? $product->donation['max'] : $this->request_vars['price'];
 			$total = ($product->donation['min'] > $total) ? $product->donation['min'] : $total;
 			$total = ($product->donation['max'] < $total) ? $product->donation['max'] : $total;
 
