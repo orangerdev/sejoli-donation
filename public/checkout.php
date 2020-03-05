@@ -227,14 +227,14 @@ class Checkout {
 			if('min' === $this->donation_invalid) :
 				sejolisa_set_message(
 					sprintf(
-						__('Donasi tidak boleh lebih kecil daripada %s', 'sejoli'),
+						__('Donasi tidak boleh lebih kecil daripada %s', 'sejoli-donation'),
 						sejolisa_price_format($min_price)
 					)
 				);
 			elseif('max' === $this->donation_invalid) :
 				sejolisa_set_message(
 					sprintf(
-						__('Donasi tidak boleh lebih besar daripada %s', 'sejoli'),
+						__('Donasi tidak boleh lebih besar daripada %s', 'sejoli-donation'),
 						sejolisa_price_format($max_price)
 					)
 				);

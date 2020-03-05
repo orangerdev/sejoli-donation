@@ -16,13 +16,13 @@ $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_pro
 
     <?php if(false !== $product->donation['show_progress']) : ?>
     <div class="donation-progress">
-        <h3><?php _e('Perkembangan Donasi', 'sejoli'); ?></h3>
+        <h3><?php _e('Perkembangan Donasi', 'sejoli-donation'); ?></h3>
         <h4>
-            <?php printf(__('Target donasi : %s', 'sejoli'), sejolisa_price_format($product->donation['goal'])); ?>
+            <?php printf(__('Target donasi : %s', 'sejoli-donation'), sejolisa_price_format($product->donation['goal'])); ?>
             <?php
             if('custom' === $product->donation['goal_limit']):
                 printf(
-                    __('hingga %s', 'sejoli'),
+                    __('hingga %s', 'sejoli-donation'),
                     date('d M Y', strtotime($product->donation['goal_limit_date']. ' 00:00:00'))
                 );
             endif; ?>
@@ -30,7 +30,7 @@ $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_pro
         <div class="ui teal small indicating progress" id='donation-progress-bar' data-percent='<?php echo $progress['percent']; ?>'>
             <div class="bar"></div>
             <div class='label'>
-                <?php printf(__('Total : %s', 'sejoli'), $progress['total']);?>
+                <?php printf(__('Total : %s', 'sejoli-donation'), $progress['total']);?>
                 <?php
                 if(in_array($progress['type'], array('weekly', 'monthly', 'yearlye'))) :
                     switch($progress['type']) :
@@ -191,9 +191,9 @@ $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_pro
                     <i class="info circle icon"></i>
                     <div class="content">
                         <div class="header">
-                            <h4><?php _e('Aturan pengisian donasi', 'sejoli'); ?></h4>
+                            <h4><?php _e('Aturan pengisian donasi', 'sejoli-donation'); ?></h4>
                             <p>
-                                <?php _e('Besar donasi bisa ditentukan oleh anda sendiri', 'sejoli'); ?><br />
+                                <?php _e('Besar donasi bisa ditentukan oleh anda sendiri', 'sejoli-donation'); ?><br />
                                 <?php printf(__('Minimal donasi: %s', 'sejoli-donation'), sejolisa_price_format($product->donation['min'])); ?><br />
                                 <?php printf(__('Maximal donasi: %s', 'sejoli-donation'), sejolisa_price_format($product->donation['max'])); ?><br />
                             </p>
