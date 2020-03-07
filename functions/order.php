@@ -68,7 +68,8 @@ function sejolisa_get_donation_progress($product_id) {
     return array(
         'total'   => sejolisa_price_format($total),
         'percent' => (0 === $goal) ? 0 : ceil($total / $goal * 100),
-        'type'    => $time_type
+        'type'    => $time_type,
+        'goal'    => sejolisa_price_format($goal),
     );
 }
 

@@ -43,6 +43,13 @@ class API {
 	private $version;
 
 	/**
+	 * Set if current request is valid user
+	 * @since	1.0.0
+	 * @var		boolean
+	 */
+	protected $is_user_logged_in = false;
+
+	/**
 	 * Check if current request is passed
 	 * @since 	1.0.0
 	 * @var  	boolean
@@ -68,24 +75,6 @@ class API {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
-	}
-
-	/**
-	 * Check if current user is logged in or
-	 * @since 	1.0.0
-	 * @param  	array $response
-	 * @return 	array
-	 */
-	protected function check_request($response) {
-
-		if(!is_user_logged_in()) :
-
-			$response['messages'][] = __('Anda harus login terlebih dahulu', 'sejoli');
-
-			$this->is_passed = false;
-		endif;
-
-		return $response;
 	}
 
 	/**
@@ -119,6 +108,38 @@ class API {
 		return $response;
 	}
 
+	/**
+	 * Login user
+	 * Hooked via filter sejoli-api-response/user/login, priority 1
+	 * @since 	1.0.0
+	 * @param  	array 	$response
+	 * @return 	array
+	 */
+	public function validate_user($response) {
+
+		$params = wp_parse_args($_POST, array(
+			'username'	=> NULL,
+			'password'	=> NULL
+		));
+
+		if(!is_user_logged_in()) :
+
+			$user =	wp_authenticate(
+						$params['username'],
+						$params['password']
+					);
+
+			if(is_wp_error($user)) :
+				$response['messages'] = $user->get_error_messages();
+			else :
+				$this->is_user_logged_in = true;
+			endif;
+
+		endif;
+
+		return $response;
+	}
+
     /**
      * Get donation list
      * Hooked via sejoli-api/donation/list, priority 1
@@ -129,9 +150,9 @@ class API {
      */
     public function get_donation_list(array $response, $product_id) {
 
-		$response = $this->check_request($response);
+		$response = $this->validate_user($response);
 
-		if(false !== $this->is_passed) :
+		if(false !== $this->is_user_logged_in) :
 
 			$product_id = intval($product_id);
 
@@ -139,11 +160,43 @@ class API {
 
 			if(false !== $this->is_product_valid) :
 
-				$response['code']      = 200;
-				$limit                 = (isset($_GET['limit'])) ? intval($_GET['limit']) :  -1;
-				$donation              = sejolisa_get_donatur_list($product_id, $product, $limit);
-				$response['data']      = $donation;
-				$response['total_dat'] = count($donation);
+				$response['code']       = 200;
+				$limit                  = (isset($_GET['limit'])) ? intval($_GET['limit']) :  -1;
+				$donation               = sejolisa_get_donatur_list($product_id, $product, $limit);
+				$response['data']       = $donation;
+				$response['total_data'] = count($donation);
+
+				unset($response['messages']);
+
+			endif;
+
+		endif;
+
+        return $response;
+    }
+
+	/**
+     * Get donation progress
+     * Hooked via sejoli-api/donation/progress, priority 1
+     * @since   1.0.0
+     * @param   array    $response
+     * @param   integer  $product_id
+     * @return  array    Response
+     */
+    public function get_donation_progress(array $response, $product_id) {
+
+		$response = $this->validate_user($response);
+
+		if(false !== $this->is_user_logged_in) :
+
+			$product_id = intval($product_id);
+
+			$this->validate_product($product_id, $response);
+
+			if(false !== $this->is_product_valid) :
+
+				$response['code'] = 200;
+				$response['data'] = sejolisa_get_donation_progress($product_id);
 
 				unset($response['messages']);
 

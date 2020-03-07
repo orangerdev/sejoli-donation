@@ -170,7 +170,9 @@ class Sejoli_Donation {
 
 		$api = new SejoliDonation\Admin\API( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_filter( 'sejoli-api-response/donation/list',	$api, 'get_donation_list', 1, 2);
+		$this->loader->add_filter( 'sejoli-api-response/user/login',		$api, 'user_login', 	   1);
+		$this->loader->add_filter( 'sejoli-api-response/donation/list',		$api, 'get_donation_list', 1, 2);
+		$this->loader->add_filter( 'sejoli-api-response/donation/progress',	$api, 'get_donation_progress', 1, 2);
 
 		$product = new SejoliDonation\Admin\Product( $this->get_plugin_name(), $this->get_version() );
 
