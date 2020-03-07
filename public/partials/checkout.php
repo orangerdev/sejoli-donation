@@ -15,7 +15,7 @@ $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_pro
     <?php endif; ?>
 
     <?php if(false !== $product->donation['show_progress']) : ?>
-    <div class="donation-progress">
+    <div class="donation-progress donation-box">
         <h3><?php _e('Perkembangan Donasi', 'sejoli-donation'); ?></h3>
         <h4>
             <?php printf(__('Target donasi : %s', 'sejoli-donation'), sejolisa_price_format($product->donation['goal'])); ?>
@@ -52,6 +52,31 @@ $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_pro
         </div>
     </div>
     <?php endif; ?>
+
+    <?php
+    if(false !== $product->donation['show_list']) :
+
+        $donatur_list = sejolisa_get_donatur_list($post->ID);
+
+        if(is_array($donatur_list) && 0 < count($donatur_list)) :
+
+        ?>
+        <div class="donation-list donation-box">
+            <h3><?php printf(__('%s Donatur Terbaru', 'ttom'), count($donatur_list)); ?></h3>
+            <ul>
+                <?php foreach($donatur_list as $list) : ?>
+                <li>
+                    <span class='donatur-name'><?php echo $list['name']; ?></span>
+                    <span class='donatur-payment'><?php echo $list['total']; ?></span>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <?php
+
+        endif;
+    endif;
+    ?>
 
     <div class="produk-dibeli">
         <table class="ui unstackable table">

@@ -71,3 +71,55 @@ function sejolisa_get_donation_progress($product_id) {
         'type'    => $time_type
     );
 }
+
+/**
+ * Get donatur list
+ * @since   1.0.0
+ * @param   integer         $product_id
+ * @param   null|WP_Post    $product
+ * @return  array
+ */
+function sejolisa_get_donatur_list($product_id, $product = NULL) {
+
+    $key          = 'donation_list_product-' . $product_id;
+    $donatur_list = get_transient($key);
+
+    if(
+        !is_a($product, 'WP_Post') ||
+        !property_exists($product, 'donation') ||
+        !array_key_exists('total_list', $product->donation)
+    ) :
+        $limit_list = carbon_get_post_meta($product_id, 'donation_total_list');
+    else :
+        $limit_list = $product->donation['total_list'];
+    endif;
+
+    if(false === $donatur_list) :
+
+        $response  = \SejoliSA\Model\Order::reset()
+                        ->set_filter('product_id', $product_id)
+                        ->set_filter('status', ['completed'])
+                        ->set_data_length($limit_list)
+                        ->get()
+                        ->respond();
+
+        if(false !== $response['valid']) :
+
+            foreach($response['orders'] as $order) :
+
+                $donatur_list[$order->ID] = array(
+                    'name'  => $order->user_name,
+                    'total' => sejolisa_price_format($order->grand_total),
+                );
+
+            endforeach;
+
+            set_transient($key, $donatur_list, 30 * DAY_IN_SECONDS);
+
+        endif;
+
+    endif;
+
+    return $donatur_list;
+
+}

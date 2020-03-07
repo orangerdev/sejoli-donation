@@ -89,14 +89,14 @@ class Product {
         $fields[]   = array(
             'title'     => __('Donasi', 'sejoli-donation'),
             'fields'    => array(
-				Field::make( 'separator', 'sep_donation' , __('Pengaturan Donasi', 'sejoli'))
+				Field::make( 'separator', 'sep_donation' , __('Pengaturan Donasi', 'sejoli-donation'))
 					->set_classes('sejoli-with-help'),
 					// ->set_help_text('<a href="' . sejolisa_get_admin_help('shipping') . '" class="thickbox sejoli-help">Tutorial <span class="dashicons dashicons-video-alt2"></span></a>'),
 
                 Field::make('html',     'html_info_donation')
                     ->set_html('<div class="sejoli-html-message info">'.
-						'<p>'. __('Pengaturan ini hanya <strong>BERLAKU</strong> jika tipe produk adalah Produk Digital', 'sejoli') . '</p>'.
-						'<p>'. __('Pastikan harga produk di tab UMUM, field <strong>Harga Satuan</strong> diisi dengan nilai 0', 'sejoli') . 
+						'<p>'. __('Pengaturan ini hanya <strong>BERLAKU</strong> jika tipe produk adalah Produk Digital', 'sejoli-donation') . '</p>'.
+						'<p>'. __('Pastikan harga produk di tab UMUM, field <strong>Harga Satuan</strong> diisi dengan nilai 0', 'sejoli-donation') .
 					'</div>'),
 
                 Field::make('checkbox', 'donation_active', 	__('Aktifkan sistem donasi', 'sejoli-donation'))
@@ -114,14 +114,14 @@ class Product {
 					->set_attribute('type', 'number')
 					->set_default_value(10000)
 					->set_required(true)
-					->set_help_text( __('Diisi dengan nilai minimum donasi. Dalam rupiah', 'sejoli'))
+					->set_help_text( __('Diisi dengan nilai minimum donasi. Dalam rupiah', 'sejoli-donation'))
 					->set_conditional_logic($conditional['donation-active']),
 
 				Field::make('text',		'donation_max',		__('Nilai maximum donasi', 'sejoli-donation'))
 					->set_attribute('type', 'number')
 					->set_default_value(1000000)
 					->set_required(true)
-					->set_help_text( __('Diisi dengan nilai maximum donasi. Dalam rupiah', 'sejoli'))
+					->set_help_text( __('Diisi dengan nilai maximum donasi. Dalam rupiah', 'sejoli-donation'))
 					->set_conditional_logic($conditional['donation-active']),
 
 				Field::make('checkbox', 'donation_show_progress', __('Tampilkan progress donasi', 'sejoli-donation'))
@@ -149,7 +149,22 @@ class Product {
 							'field'	=> 'donation_goal_limit',
 							'value'	=> 'custom'
 						)
+					)),
+
+				Field::make('checkbox', 'donation_show_list',	__('Tampilkan daftar donasi di halaman checkout', 'sejoli-donation')),
+
+				Field::make('text',	'donation_total_list',		__('Jumlah list donator', 'sejoli-donation'))
+					->set_attribute('type', 'number')
+					->set_attribute('max',	20)
+					->set_default_value(5)
+					->set_help_text(__('Maksimal jumlah donatur yang ditampilkan adalah 20 list. Data donasi yang ditampilkan adalah data terbaru', 'sejoli-donation'))
+					->set_conditional_logic(array(
+						array(
+							'field'	=> 'donation_show_list',
+							'value'	=> true
+						)
 					))
+
 
             )
         );
@@ -176,7 +191,9 @@ class Product {
 				'show_progress'   => boolval( carbon_get_post_meta($product_id, 'donation_show_progress') ),
 				'goal'            => floatval( carbon_get_post_meta($product_id, 'donation_goal') ),
 				'goal_limit'      => carbon_get_post_meta($product_id, 'donation_goal_limit'),
-				'goal_limit_date' => carbon_get_post_meta($product_id, 'donation_goal_limit_date')
+				'goal_limit_date' => carbon_get_post_meta($product_id, 'donation_goal_limit_date'),
+				'show_list'		  => boolval( carbon_get_post_meta($product_id, 'donation_show_list')),
+				'total_list'	  => intval(carbon_get_post_meta($product_id, 'donation_total_list'))
 			);
 		else :
 			$product->donation = false;
