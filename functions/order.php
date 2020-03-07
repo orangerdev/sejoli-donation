@@ -72,6 +72,32 @@ function sejolisa_get_donation_progress($product_id) {
     );
 }
 
+if(!function_exists('sejolisa_get_sensored_string')) :
+
+/**
+ * Change all chars except first and last
+ * @note    We will move this function to main sejoli plugin in version 1.3.3
+ * @since   1.0.0
+ * @param  string   $string           Given string
+ * @param  string   $replace_char     Characater that will replace
+ * @return string   String that has been replaced
+ */
+function sejolisa_get_sensored_string(string $string, $replace_char = '*') {
+
+    $words = explode(' ', $string);
+
+    foreach($words as $i => $word) :
+
+        $length    = strlen($word);
+        $words[$i] = substr($word, 0, 1).str_repeat('*', $length - 2).substr($word, $length - 1, 1);
+
+    endforeach;
+
+    return implode(' ', $words);
+}
+
+endif;
+
 /**
  * Get donatur list
  * @since   1.0.0
@@ -89,9 +115,11 @@ function sejolisa_get_donatur_list($product_id, $product = NULL) {
         !property_exists($product, 'donation') ||
         !array_key_exists('total_list', $product->donation)
     ) :
-        $limit_list = carbon_get_post_meta($product_id, 'donation_total_list');
+        $limit_list  = intval(carbon_get_post_meta($product_id, 'donation_total_list'));
+        $is_sensored = boolval(carbon_get_post_meta($product_id, 'donation_list_sensor_name'));
     else :
-        $limit_list = $product->donation['total_list'];
+        $limit_list  = $product->donation['total_list'];
+        $is_sensored = $product->donation['list_sensor_name'];
     endif;
 
     if(false === $donatur_list) :
@@ -117,6 +145,14 @@ function sejolisa_get_donatur_list($product_id, $product = NULL) {
             set_transient($key, $donatur_list, 30 * DAY_IN_SECONDS);
 
         endif;
+
+    endif;
+
+    if(false !== $is_sensored) :
+
+        foreach( (array) $donatur_list as $i => $list) :
+            $donatur_list[$i]['name'] = sejolisa_get_sensored_string($list['name']);
+        endforeach;
 
     endif;
 

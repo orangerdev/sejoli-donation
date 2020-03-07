@@ -163,6 +163,15 @@ class Product {
 							'field'	=> 'donation_show_list',
 							'value'	=> true
 						)
+					)),
+
+				Field::make('checkbox', 'donation_list_sensor_name',	__('Rahasiakan nama donatur', 'sejoli-donation'))
+					->set_help_text( __('Dengan mengaktifkan fitur ini, sistem akan merahasiakan nama donatur. Contoh, Ridwan Arifandi menjadi R****n A******i', 'ttom'))
+					->set_conditional_logic(array(
+						array(
+							'field'	=> 'donation_show_list',
+							'value'	=> true
+						)
 					))
 
 
@@ -186,14 +195,15 @@ class Product {
 
 		if(false !== $active) :
 			$product->donation 	= array(
-				'min'             => floatval( carbon_get_post_meta($product_id, 'donation_min') ),
-				'max'             => floatval( carbon_get_post_meta($product_id, 'donation_max') ),
-				'show_progress'   => boolval( carbon_get_post_meta($product_id, 'donation_show_progress') ),
-				'goal'            => floatval( carbon_get_post_meta($product_id, 'donation_goal') ),
-				'goal_limit'      => carbon_get_post_meta($product_id, 'donation_goal_limit'),
-				'goal_limit_date' => carbon_get_post_meta($product_id, 'donation_goal_limit_date'),
-				'show_list'		  => boolval( carbon_get_post_meta($product_id, 'donation_show_list')),
-				'total_list'	  => intval(carbon_get_post_meta($product_id, 'donation_total_list'))
+				'min'              => floatval( carbon_get_post_meta($product_id, 'donation_min') ),
+				'max'              => floatval( carbon_get_post_meta($product_id, 'donation_max') ),
+				'show_progress'    => boolval( carbon_get_post_meta($product_id, 'donation_show_progress') ),
+				'goal'             => floatval( carbon_get_post_meta($product_id, 'donation_goal') ),
+				'goal_limit'       => carbon_get_post_meta($product_id, 'donation_goal_limit'),
+				'goal_limit_date'  => carbon_get_post_meta($product_id, 'donation_goal_limit_date'),
+				'show_list'        => boolval( carbon_get_post_meta($product_id, 'donation_show_list')),
+				'total_list'       => intval(carbon_get_post_meta($product_id, 'donation_total_list')),
+				'list_sensor_name' => boolval( carbon_get_post_meta($product_id, 'donation_list_sensor_name'))
 			);
 		else :
 			$product->donation = false;
