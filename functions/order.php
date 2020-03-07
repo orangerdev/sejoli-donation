@@ -103,12 +103,10 @@ endif;
  * @since   1.0.0
  * @param   integer         $product_id
  * @param   null|WP_Post    $product
+ * @param   integer         $limt           Limit to show total donation list
  * @return  array
  */
-function sejolisa_get_donatur_list($product_id, $product = NULL) {
-
-    $key          = 'donation_list_product-' . $product_id;
-    $donatur_list = get_transient($key);
+function sejolisa_get_donatur_list($product_id, $product = NULL, $limit = 0) {
 
     if(
         !is_a($product, 'WP_Post') ||
@@ -122,12 +120,14 @@ function sejolisa_get_donatur_list($product_id, $product = NULL) {
         $is_sensored = $product->donation['list_sensor_name'];
     endif;
 
+    $key          = 'donation_list_product-' . $product_id;
+    $donatur_list = false;get_transient($key);
+
     if(false === $donatur_list) :
 
         $response  = \SejoliSA\Model\Order::reset()
                         ->set_filter('product_id', $product_id)
                         ->set_filter('status', ['completed'])
-                        ->set_data_length($limit_list)
                         ->get()
                         ->respond();
 
@@ -154,6 +154,12 @@ function sejolisa_get_donatur_list($product_id, $product = NULL) {
             $donatur_list[$i]['name'] = sejolisa_get_sensored_string($list['name']);
         endforeach;
 
+    endif;
+
+    if(0 === $limit) :
+        $donatur_list = array_slice($donatur_list, 0, $limit_list);
+    elseif( 0 < $limit) :
+        $donatur_list = array_slice($donatur_list, 0, $limit);
     endif;
 
     return $donatur_list;

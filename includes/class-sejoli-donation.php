@@ -115,6 +115,7 @@ class Sejoli_Donation {
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/api.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/order.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/product.php';
 
@@ -123,6 +124,7 @@ class Sejoli_Donation {
 		 * side of the site.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/checkout.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/endpoint.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/public.php';
 
 
@@ -166,6 +168,10 @@ class Sejoli_Donation {
 		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_scripts' );
 
+		$api = new SejoliDonation\Admin\API( $this->get_plugin_name(), $this->get_version() );
+
+		$this->loader->add_filter( 'sejoli-api-response/donation/list',	$api, 'get_donation_list', 1, 2);
+
 		$product = new SejoliDonation\Admin\Product( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_filter( 'sejoli/product/fields',		$product, 'set_product_fields', 	12);
@@ -176,6 +182,7 @@ class Sejoli_Donation {
 		$this->loader->add_action( 'sejoli/order/set-status/completed',			$order, 'refresh_donation_cache', 100);
 		$this->loader->add_action( 'sejoli/order/set-status/refunded', 			$order, 'refresh_donation_cache', 100);
 		$this->loader->add_action( 'sejoli/order/set-status/cancelled', 		$order, 'refresh_donation_cache', 100);
+
 	}
 
 	/**
@@ -186,6 +193,13 @@ class Sejoli_Donation {
 	 * @access   private
 	 */
 	private function define_public_hooks() {
+
+		// Later we will remove this class to a standalone plugin
+		$endpoint = new SejoliDonation\Front\Endpoint( $this->get_plugin_name(), $this->get_version() );
+
+		$this->loader->add_action( 'init',				$endpoint, 'set_endpoint', 		1);
+		$this->loader->add_action( 'query_vars',		$endpoint, 'set_query_vars',	999);
+		$this->loader->add_action( 'template_redirect',	$endpoint, 'check_parse_query', 100);
 
 		$public = new SejoliDonation\Front( $this->get_plugin_name(), $this->get_version() );
 
