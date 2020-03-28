@@ -149,7 +149,11 @@ function sejolisa_get_donatur_list($product_id, $product = NULL, $limit = 0) {
 
     endif;
 
-    if(false !== $is_sensored) :
+    if(
+        false !== $is_sensored &&
+        is_array($donatur_list) &&
+        0 < count($donatur_list)
+    ) :
 
         foreach( (array) $donatur_list as $i => $list) :
             $donatur_list[$i]['name'] = sejolisa_get_sensored_string($list['name']);
