@@ -5,6 +5,7 @@ sejoli_get_template_part( 'checkout/header-logo.php' );
 $product                  = sejolisa_get_product($post->ID);
 $progress                 = sejolisa_get_donation_progress($post->ID);
 $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_product_description'));
+$display_password = boolval(carbon_get_theme_option('sejoli_registration_display_password'));
 ?>
 <div class="ui text container donation-checkout">
 
@@ -307,10 +308,14 @@ $use_checkout_description = boolval(carbon_get_post_meta($post->ID, 'display_pro
             <input type="email" name="user_email" id="user_email" placeholder="Masukan alamat email">
             <div class="alert-holder user-email-alert-holder"></div>
         </div>
+        <?php
+
+        if($display_password) : ?>
         <div class="required field">
             <label>Password</label>
             <input type="password" name="user_password" id="user_password" placeholder="Masukan password anda">
         </div>
+        <?php endif; ?>
         <div class="required field">
             <label>No Handphone</label>
             <p>Kami akan menggunakan no hp untuk keperluan administrasi</p>
