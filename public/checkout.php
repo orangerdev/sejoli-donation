@@ -101,7 +101,7 @@ class Checkout {
 		));
 
 		if(0 !== $post_data['price']) :
-			$post_data['price']	= floatval( str_replace('.', '', $post_data['price']) );
+			$post_data['price']	= floatval( preg_replace("/[^0-9]/", "", $post_data['price']) );
 		endif;
 
 		$this->request_vars = $post_data;
