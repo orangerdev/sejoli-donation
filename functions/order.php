@@ -102,6 +102,7 @@ endif;
 /**
  * Get donatur list
  * @since   1.0.0
+ * @since   1.2.0        Add human time difference in donatur list
  * @param   integer         $product_id
  * @param   null|WP_Post    $product
  * @param   integer         $limt           Limit to show total donation list

@@ -161,6 +161,8 @@ class Checkout {
 	/**
 	 * Set product price
 	 * Hooked via filter sejoli/product/price, priority 15
+	 * @since 	1.0.0
+	 * @since 	1.2.0	Set default price as zero
 	 * @param 	integer|float  	$price
 	 * @param 	WP_Post 		$product
 	 * @return 	float
