@@ -142,7 +142,7 @@ function sejolisa_get_donatur_list($product_id, $product = NULL, $limit = 0) {
                 $donatur_list[$order->ID] = array(
                     'name'       => $order->user_name,
                     'total'      => sejolisa_price_format($order->grand_total),
-                    'human_time' => Carbon::parse($order->updated_at)->diffForHumans(Carbon::now()),
+                    'human_time' => Carbon::parse(Carbon::now())->diffForHumans($order->updated_at),
                 );
 
             endforeach;
