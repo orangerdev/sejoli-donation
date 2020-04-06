@@ -191,7 +191,7 @@ class Checkout {
 
 		endif;
 
-		return floatval($price);
+		return (!isset($this->request_vars['price'])) ? 0 : $this->request_vars['price'];
 	}
 
 	/**
@@ -265,7 +265,7 @@ class Checkout {
 			$this->amount = $total;
 		endif;
 
-		return floatval($total);
+		return $this->request_vars['price'];
 	}
 
 	/**
