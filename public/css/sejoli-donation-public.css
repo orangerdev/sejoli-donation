@@ -55,8 +55,21 @@
     display: block;
 }
 
+.donation-checkout .donation-list span.donatur-name {
+    width: calc(100% - 130px);
+    line-height: 200%;
+}
+
+.donation-checkout .donation-list span.donatur-time {
+    display: inline-block;
+    font-size:12px;
+    color:#00b5ad!important;
+}
+
 .donation-checkout .donation-list span.donatur-payment {
     font-weight: bold;
+    width:120px;
+    text-align: right;
 }
 
 

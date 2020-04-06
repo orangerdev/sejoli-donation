@@ -67,7 +67,13 @@ $display_password = boolval(carbon_get_theme_option('sejoli_registration_display
             <ul>
                 <?php foreach($donatur_list as $list) : ?>
                 <li>
-                    <span class='donatur-name'><?php echo $list['name']; ?></span>
+                    <span class='donatur-name'>
+                        <?php echo $list['name']; ?><br />
+                        <span class='donatur-time'>
+                            <i class="clock icon"></i>
+                            <?php echo $list['human_time']; ?>
+                        </span>
+                    </span>
                     <span class='donatur-payment'><?php echo $list['total']; ?></span>
                 </li>
                 <?php endforeach; ?>
