@@ -215,7 +215,7 @@ class Sejoli_Donation {
 		$this->loader->add_action( 'parse_request',						$checkout, 'check_requested_variables',	1);
 		$this->loader->add_filter( 'single_template',					$checkout, 'set_checkout_template', 	120);
 		$this->loader->add_filter( 'sejoli/checkout/is-product-valid',	$checkout, 'validate_donation',			10, 2);
-		$this->loader->add_filter( 'sejoli/product/price',				$checkout, 'set_product_price',			15, 2);
+		$this->loader->add_filter( 'sejoli/product/price',				$checkout, 'set_product_price',			300, 2);
 		$this->loader->add_filter( 'sejoli/order/order-detail',			$checkout, 'set_product_price_in_order',		100);
 		$this->loader->add_filter( 'sejoli/order/grand-total',			$checkout, 'set_grand_total',					101, 2);
 		$this->loader->add_filter( 'sejoli/order/meta-data', 			$checkout, 'add_donation_amount_to_order_meta', 200, 2);

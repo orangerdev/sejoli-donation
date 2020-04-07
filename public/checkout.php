@@ -163,6 +163,7 @@ class Checkout {
 	 * Hooked via filter sejoli/product/price, priority 15
 	 * @since 	1.0.0
 	 * @since 	1.2.0	Set default price as zero
+	 * @since 	1.2.1	Fix bug in price
 	 * @param 	integer|float  	$price
 	 * @param 	WP_Post 		$product
 	 * @return 	float
@@ -172,28 +173,43 @@ class Checkout {
 		$product_id = $product->ID;
 		$active     = boolval( carbon_get_post_meta($product_id, 'donation_active') );
 
-		if(false !== $active && isset($this->request_vars['price'])) :
+		if(false !== $active):
 
-			$min_price = carbon_get_post_meta($product_id, 'donation_min');
-			$max_price = carbon_get_post_meta($product_id, 'donation_max');
+			$price = 0;
 
-			$price     = (0 === $this->request_vars['price']) ? $max_price : $this->request_vars['price'];
+			if(isset($this->request_vars['price'])) :
 
-			if($min_price > $price) :
+				$min_price = carbon_get_post_meta($product_id, 'donation_min');
+				$max_price = carbon_get_post_meta($product_id, 'donation_max');
 
-				$price                  = $min_price;
-				$this->donation_invalid = 'min';
 
-			elseif($max_price < $price) :
+				if(0 === $this->request_vars['price']) :
 
-				$price                  = $max_price;
-				$this->donation_invalid = 'max';
+					$this->donation_invalid = 'min';
+
+				elseif($min_price > $this->request_vars['price']) :
+
+					$price                  = $min_price;
+					$this->donation_invalid = 'min';
+					$this->request_vars['price'] = $price;
+
+				elseif($max_price < $this->request_vars['price']) :
+
+					$price                  = $max_price;
+					$this->donation_invalid = 'max';
+					$this->request_vars['price'] = $price;
+
+				else :
+
+					return $this->request_vars['price'];
+					
+				endif;
 
 			endif;
 
 		endif;
 
-		return (!isset($this->request_vars['price'])) ? 0 : $this->request_vars['price'];
+		return $price;
 	}
 
 	/**
@@ -233,6 +249,7 @@ class Checkout {
 						sejolisa_price_format($min_price)
 					)
 				);
+
 			elseif('max' === $this->donation_invalid) :
 				sejolisa_set_message(
 					sprintf(
@@ -262,6 +279,7 @@ class Checkout {
 		$product = sejolisa_get_product($post_data['product_id']);
 
 		if(false !== $product->donation) :
+
 			$total = (0 === $this->request_vars['price']) ? $product->donation['max'] : $this->request_vars['price'];
 			$total = ($product->donation['min'] > $total) ? $product->donation['min'] : $total;
 			$total = ($product->donation['max'] < $total) ? $product->donation['max'] : $total;
@@ -269,7 +287,7 @@ class Checkout {
 			$this->amount = $total;
 		endif;
 
-		return $this->request_vars['price'];
+		return $total;
 	}
 
 	/**
