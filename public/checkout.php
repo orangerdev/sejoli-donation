@@ -242,6 +242,8 @@ class Checkout {
 				);
 			endif;
 
+			return false;
+
 		endif;
 
 		return $valid;
