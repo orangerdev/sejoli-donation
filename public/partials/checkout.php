@@ -272,7 +272,7 @@ $display_password = boolval(carbon_get_theme_option('sejoli_registration_display
 <script id="login-template" type="text/x-jsrender">
     {{if current_user.id}}
         <div class="login-welcome">
-            <p>Hai, Saat ini kau sedang menggunakan akun <span class="name">{{:current_user.name}}</span>, <a href="<?php echo wp_logout_url( get_permalink() ); ?>">Logout</a></p>
+            <p>Hai, Saat ini anda sedang menggunakan akun <span class="name">{{:current_user.name}}</span>, <a href="<?php echo wp_logout_url( get_permalink() ); ?>">Logout</a></p>
         </div>
     {{else}}
         <?php if(false !== $product->form['login_field']) : ?>
@@ -356,11 +356,10 @@ var checkout,
 jQuery(document).ready(function($){
     $('#donation-progress-bar').progress();
 
-    checkout = new sejoliSaCheckout();
-    checkout.init();
+    sejoliSaCheckout.init();
 
     $(document).on('ready', '#price', function(){
-        checkout.getCalculate();
+        sejoliSaCheckout.getCalculate();
     });
 
 
@@ -373,7 +372,7 @@ jQuery(document).on('keyup', '#price', function(){
 
     delay = setTimeout(function(){
         input = $(this).parent().addClass('loading');
-        checkout.getCalculate();
+        sejoliSaCheckout.getCalculate();
     },2000)
 })
 
