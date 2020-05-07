@@ -165,10 +165,14 @@ function sejolisa_get_donatur_list($product_id, $product = NULL, $limit = 0) {
 
     endif;
 
-    if(0 === $limit) :
-        $donatur_list = array_slice($donatur_list, 0, $limit_list);
-    elseif( 0 < $limit) :
-        $donatur_list = array_slice($donatur_list, 0, $limit);
+    if(is_array($donatur_list)) :
+
+        if(0 === $limit) :
+            $donatur_list = array_slice($donatur_list, 0, $limit_list);
+        elseif( 0 < $limit) :
+            $donatur_list = array_slice($donatur_list, 0, $limit);
+        endif;
+
     endif;
 
     return $donatur_list;

@@ -4,7 +4,7 @@ Donate link: Ridwan Arifandi
 Tags: donation, crowdfunding
 Requires at least: 3.0.1
 Tested up to: 3.4
-Stable tag: 1.2.2
+Stable tag: 1.2.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,9 @@ Coming soon
 Coming soon
 
 == Changelog ==
+
+= 1.2.2.1
+* Fix warnin notice that no-displaying donation list
 
 = 1.2.2
 * Fix js problem in checkout page, happened after sejoli 1.4.0
