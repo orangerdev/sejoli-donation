@@ -90,7 +90,12 @@ function sejolisa_get_sensored_string(string $string, $replace_char = '*') {
     foreach($words as $i => $word) :
 
         $length    = strlen($word);
-        $words[$i] = substr($word, 0, 1).str_repeat('*', $length - 2).substr($word, $length - 1, 1);
+
+        if(2 < $length) :
+            $words[$i] = substr($word, 0, 1).str_repeat('*', $length - 2).substr($word, $length - 1, 1);
+        else :
+            $words[$i] = $word;
+        endif;
 
     endforeach;
 
