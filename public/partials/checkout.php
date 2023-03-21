@@ -213,10 +213,10 @@ $display_password = boolval(carbon_get_theme_option('sejoli_registration_display
             </td>
         </tr>
         <tr>
-            <td colspan='2' style='padding-top:0;text-align:left;'>
+            <td colspan='2' class="price-set" style='padding-top:0;text-align:left;'>
                 <div class="ui icon fluid teal labeled input">
                     <div class="ui teal label">Rp.</div>
-                    <input type='text' id='price' name='price' value="{{:product.price}}" />
+                    <input type='text' id='price' name='price' onclick='javascript: this.value = ""' onfocus='javascript: this.value = ""' value="{{:product.price}}" />
                     <i class="hand paper outline icon"></i>
                 </div>
                 <div class="ui info tiny icon message">
@@ -354,29 +354,112 @@ var checkout,
     delay = 0;
 
 jQuery(document).ready(function($){
+
     $('#donation-progress-bar').progress();
 
     sejoliSaCheckout.init();
 
     $(document).on('ready', '#price', function(){
-        sejoliSaCheckout.getCalculate();
-    });
+        
+        var data = sejoliSaCheckout.func.setData('calculate', sejoli_checkout.ajax_nonce.get_calculate);
 
+        setTimeout(function(){ 
+            var payment_gateway  = $('input[name="payment_gateway"]:checked').val();
+            data.payment_gateway = payment_gateway;
+
+            $.ajax({
+                url : sejoli_checkout.ajax_url,
+                type: 'post',
+                data: data,
+                beforeSend: function() {
+                    sejoliSaBlockUI('', '.element-blockable');
+                },
+                success: function( response ) {
+                    sejoliSaUnblockUI('.element-blockable');
+
+                    if ( typeof response.calculate !== 'undefined' ) {
+
+                        var template   = $.templates("#produk-dibeli-template");
+                        var htmlOutput = template.render(response.calculate);
+
+                        $(".produk-dibeli tbody").html(htmlOutput);
+
+                        var template   = $.templates("#beli-sekarang-template");
+                        var htmlOutput = template.render();
+                        $(".beli-sekarang .data-holder").html(htmlOutput);
+
+                        if(response.calculate.affiliate) {
+                            $(".affiliate-name").html(sejoli_checkout.affiliasi_oleh + ' ' + response.calculate.affiliate);
+                        }
+
+                        $(".total-holder").html( response.calculate.total );
+
+                        $('input[name="payment_gateway"]').trigger("change");
+                    }
+                }
+            });
+
+        }, 2000);
+
+    });
 
 });
 
 jQuery(document).on('keyup', '#price', function(){
+
     var input;
 
     clearTimeout(delay);
 
     delay = setTimeout(function(){
-        input = $(this).parent().addClass('loading');
-        sejoliSaCheckout.getCalculate();
-    },2000)
-})
 
+        input = $(this).parent().addClass('loading');
+        
+        var data = sejoliSaCheckout.func.setData('calculate', sejoli_checkout.ajax_nonce.get_calculate);
+
+        setTimeout(function(){ 
+            var payment_gateway  = $('input[name="payment_gateway"]:checked').val();
+            data.payment_gateway = payment_gateway;
+
+            $.ajax({
+                url : sejoli_checkout.ajax_url,
+                type: 'post',
+                data: data,
+                beforeSend: function() {
+                    sejoliSaBlockUI('', '.price-set');
+                    sejoliSaBlockUI('', '.element-blockable');
+                },
+                success: function( response ) {
+                    sejoliSaUnblockUI('.price-set');
+                    sejoliSaUnblockUI('.element-blockable');
+                    
+                    if ( typeof response.calculate !== 'undefined' ) {
+
+                        var template   = $.templates("#produk-dibeli-template");
+                        var htmlOutput = template.render(response.calculate);
+
+                        $(".produk-dibeli tbody").html(htmlOutput);
+
+                        var template   = $.templates("#beli-sekarang-template");
+                        var htmlOutput = template.render();
+                        $(".beli-sekarang .data-holder").html(htmlOutput);
+
+                        if(response.calculate.affiliate) {
+                            $(".affiliate-name").html(sejoli_checkout.affiliasi_oleh + ' ' + response.calculate.affiliate);
+                        }
+
+                        $(".total-holder").html( response.calculate.total );
+                    }
+                }
+            });
+
+        }, 200);
+    
+    }, 2000);
+
+})
 </script>
+
 <?php
 sejoli_get_template_part( 'checkout/footer-secure.php' );
 sejoli_get_template_part( 'checkout/footer.php' );
